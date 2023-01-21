@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 class Cube:
 
     def __init__(self, x, y, z):
@@ -13,25 +15,28 @@ class Cube:
             return self.x == other.x and self.y == other.y and self.z == other.z
         return False
 
-    def add_x(self, delta):
+    def add_x(self, delta) -> Cube:
         return self.add(delta, 0, 0)
 
-    def add_y(self, delta):
+    def add_y(self, delta) -> Cube:
         return self.add(0, delta, 0)
-        
-    def add_z(self, delta):
+
+    def add_z(self, delta) -> Cube:
         return self.add(0, 0, delta)
 
-    def add(self, delta_x, delta_y, delta_z):
+    def add(self, delta_x, delta_y, delta_z) -> Cube:
         return Cube(self.x + delta_x, self.y + delta_y, self.z + delta_z)
 
     def neighbors(self):
-        return [self.add_x(1), 
-                self.add_x(-1), 
-                self.add_y(1), 
-                self.add_y(-1), 
-                self.add_z(1), 
-                self.add_z(-1)]
+        return [
+            self.add_x(1),
+            self.add_x(-1),
+            self.add_y(1),
+            self.add_y(-1),
+            self.add_z(1),
+            self.add_z(-1)
+        ]
+
 
 def read_cube(line) -> Cube:
     splitted_ints = [int(text) for text in line.split(",")]
@@ -40,6 +45,7 @@ def read_cube(line) -> Cube:
         splitted_ints[1],
         splitted_ints[2],
     )
+
 
 def calc_cubes_surface() -> int:
     surface = 0
@@ -50,8 +56,9 @@ def calc_cubes_surface() -> int:
         surface += 6 - len(intersection)
         print(i)
         i += 1
-        
+
     return surface
+
 
 cubes = []
 
@@ -61,7 +68,3 @@ with open('Input.txt') as f:
         cubes.append(cube)
 
 print(f"Surface: {calc_cubes_surface()}")
-
-
-
-        
