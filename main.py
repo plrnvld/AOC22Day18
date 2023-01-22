@@ -55,14 +55,18 @@ def calc_cubes_surface() -> int:
     surface = 0
     i = 1
     for c in cubes_dict.values():
-        num_neighbors = sum(map(lambda n: n.key in cubes_dict, c.neighbors()))
-        surface += 6 - num_neighbors
+        num_water_neighbors = sum(
+            map(lambda n: n.key in water_dict, c.neighbors()))
+        surface += num_water_neighbors
+        # num_neighbors = sum(map(lambda n: n.key in cubes_dict, c.neighbors()))
+        # surface += 6 - num_neighbors
         i += 1
 
     return surface
 
 
 cubes_dict = dict()
+water_dict = dict()
 
 with open('Input.txt') as f:
     for line in f:
@@ -80,11 +84,40 @@ for cube in cubes_dict.values():
     min_z = min(min_z, cube.z)
     max_z = max(max_z, cube.z)
 
-print(f"Min x:{min_x}, max x:{max_x}, min y:{min_y}, max y:{max_y}, min z:{min_z}, max z:{max_z}")
+print(
+    f"Min x:{min_x}, max x:{max_x}, min y:{min_y}, max y:{max_y}, min z:{min_z}, max z:{max_z}"
+)
 
 start = datetime.now()
-print(f"Surface: {calc_cubes_surface()}")
-finish = datetime.now()
 
+
+def iterate_on_water_cubes(i: int):
+    count = 0
+    for z in range(min_z - 1, max_z + 2):
+        for y in range(min_y - 1, max_y + 2):
+            for x in range(min_x - 1, max_x + 2):
+                cube = Cube(x, y, z)
+                if (not cube.key in water_dict and not cube.key in cubes_dict
+                        and any(n.key in water_dict
+                                for n in cube.neighbors())):
+                    water_dict[cube.key] = cube
+                    count += 1
+
+    print(f"Iteration {i} added {count} water cubes")
+
+
+initial_water_cube = Cube(min_x - 1, min_y - 1, min_z - 1)
+water_dict[initial_water_cube.key] = initial_water_cube
+
+for i in range(1, 10):
+    iterate_on_water_cubes(i)
+
+print(
+    f"Water cubes: {len(water_dict.values())}, lava cubes {len(cubes_dict.values())}"
+)
+
+finish = datetime.now()
 delta = finish - start
 print(f"Calculation time: {delta}")
+print()
+print(f"Surface: {calc_cubes_surface()}")
