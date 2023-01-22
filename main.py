@@ -53,7 +53,7 @@ def read_cube(line) -> Cube:
 def calc_cubes_surface() -> int:
     surface = 0
     i = 1
-    for c in cubes:
+    for c in cubes_dict.values():
         num_neighbors = sum(map(lambda n: n.key in cubes_dict, c.neighbors()))
         surface += 6 - num_neighbors
         i += 1
@@ -61,13 +61,11 @@ def calc_cubes_surface() -> int:
     return surface
 
 
-cubes = []
 cubes_dict = dict()
 
 with open('Input.txt') as f:
     for line in f:
         cube = read_cube(line)
-        cubes.append(cube)
         cubes_dict[cube.key] = cube
 
 start = datetime.now()
@@ -75,4 +73,4 @@ print(f"Surface: {calc_cubes_surface()}")
 finish = datetime.now()
 
 delta = finish - start
-print(f"Time difference: {delta}")
+print(f"Calculation time: {delta}")
