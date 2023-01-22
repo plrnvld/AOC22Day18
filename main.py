@@ -69,12 +69,8 @@ with open('Input.txt') as f:
         cube = read_cube(line)
         cubes_dict[cube.key] = cube
 
-min_x = sys.maxsize
-max_x = -sys.maxsize
-min_y = sys.maxsize
-max_y = -sys.maxsize
-min_z = sys.maxsize
-max_z = -sys.maxsize
+min_x = min_y = min_z = sys.maxsize
+max_x = max_y = max_z = -sys.maxsize
 
 for cube in cubes_dict.values():
     min_x = min(min_x, cube.x)
