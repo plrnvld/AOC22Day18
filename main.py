@@ -1,4 +1,6 @@
 from __future__ import annotations
+from datetime import datetime
+
 
 class Cube:
 
@@ -6,6 +8,7 @@ class Cube:
         self.x = x
         self.y = y
         self.z = z
+        self.key = f"{x},{y},{z}"
 
     def __str__(self):
         return f"Cube ({self.x},{self.y},{self.z})"
@@ -51,20 +54,25 @@ def calc_cubes_surface() -> int:
     surface = 0
     i = 1
     for c in cubes:
-        neighbors = c.neighbors()
-        intersection = [value for value in neighbors if value in cubes]
-        surface += 6 - len(intersection)
-        print(i)
+        num_neighbors = sum(map(lambda n: n.key in cubes_dict, c.neighbors()))
+        surface += 6 - num_neighbors
         i += 1
 
     return surface
 
 
 cubes = []
+cubes_dict = dict()
 
 with open('Input.txt') as f:
     for line in f:
         cube = read_cube(line)
         cubes.append(cube)
+        cubes_dict[cube.key] = cube
 
+start = datetime.now()
 print(f"Surface: {calc_cubes_surface()}")
+finish = datetime.now()
+
+delta = finish - start
+print(f"Time difference: {delta}")
