@@ -1,5 +1,6 @@
 from __future__ import annotations
 from datetime import datetime
+import sys
 
 
 class Cube:
@@ -67,6 +68,23 @@ with open('Input.txt') as f:
     for line in f:
         cube = read_cube(line)
         cubes_dict[cube.key] = cube
+
+min_x = sys.maxsize
+max_x = -sys.maxsize
+min_y = sys.maxsize
+max_y = -sys.maxsize
+min_z = sys.maxsize
+max_z = -sys.maxsize
+
+for cube in cubes_dict.values():
+    min_x = min(min_x, cube.x)
+    max_x = max(max_x, cube.x)
+    min_y = min(min_y, cube.y)
+    max_y = max(max_y, cube.y)
+    min_z = min(min_z, cube.z)
+    max_z = max(max_z, cube.z)
+
+print(f"Min x:{min_x}, max x:{max_x}, min y:{min_y}, max y:{max_y}, min z:{min_z}, max z:{max_z}")
 
 start = datetime.now()
 print(f"Surface: {calc_cubes_surface()}")
